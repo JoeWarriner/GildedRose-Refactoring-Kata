@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from gilded_rose import Item, GildedRose, BasicItemAger
+from gilded_rose import Item, GildedRose
 
 
 class GildedRoseTest(unittest.TestCase):
@@ -87,7 +87,7 @@ class GildedRoseTest(unittest.TestCase):
         for i in [1, 2, 3]:
             gilded_rose.update_quality()
             self.assertEqual(test_item.quality, i)
-            
+
     # Aged Brie - unspecified behaviour
 
     def test_quality_aged_brie_qual_increase_after_date(self):
