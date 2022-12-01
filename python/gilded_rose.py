@@ -1,8 +1,9 @@
+from __future__ import annotations
 # -*- coding: utf-8 -*-
 
 class GildedRose(object):
 
-    def __init__(self, items):
+    def __init__(self, items: list[Item]):
         self.items = items
 
     def update_quality(self):
