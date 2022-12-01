@@ -13,13 +13,13 @@ class GildedRose(object):
         self.items = []
         for item in items:
             if item.name not in SPECIAL_ITEMS:
-                self.items.append(ItemAger(item))
+                self.items.append(BasicItemAger(item))
             else:
                 self.items.append(item)
 
     def update_quality(self):
         for item in self.items:
-            if isinstance(item, ItemAger):
+            if isinstance(item, BasicItemAger):
                 item.update_quality()
             else:
                 self._update_quality_legacy(item)
@@ -56,18 +56,43 @@ class GildedRose(object):
 
 
 
-class ItemAger:
+
+
+class BasicItemAger:
+    quality_rates = {
+        'threshold_rates': {
+            0: -1
+        },
+        'final_rate': -2
+    }
 
     def __init__(self, item: Item):
         self.item = item
         self.age_rate = -1
 
+    def update_quality_rate(self):
+        '''Update rate of quality increase/decline based on item sell_in value'''
+
+        if self.item.sell_in < min(self.quality_rates['threshold_rates'].keys()):
+            self.quality_rate = self.quality_rates['final_rate']
+        else:
+            threshold = max( [t for t in self.quality_rates['threshold_rates'] if t <= self.item.sell_in])
+            self.quality_rate = self.quality_rates['threshold_rates'][threshold]
+
     def update_quality(self):
+        ''' Update quality of item'''
         self.item.sell_in -= 1
-        if self.item.quality > 0:
-            self.item.quality += self.age_rate
-        if self.item.sell_in <= 0:
-            self.age_rate = -2
+        self.update_quality_rate()
+        try:
+            new_quality = self.item.quality + self.quality_rate
+            assert new_quality >= 0
+        except AssertionError:
+            new_quality = 0
+        self.item.quality = new_quality
+
+
+
+
 
 
 
