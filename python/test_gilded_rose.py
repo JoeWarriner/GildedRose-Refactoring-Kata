@@ -81,6 +81,13 @@ class GildedRoseTest(unittest.TestCase):
             gilded_rose.update_quality()
             self.assertEqual(test_item.quality, i)
 
+    def test_quality_aged_brie_qual_increase(self):
+        test_item = Item("Aged Brie", 3, 0)
+        gilded_rose = GildedRose([test_item])
+        for i in [1, 2, 3]:
+            gilded_rose.update_quality()
+            self.assertEqual(test_item.quality, i)
+            
     # Aged Brie - unspecified behaviour
 
     def test_quality_aged_brie_qual_increase_after_date(self):
@@ -110,15 +117,6 @@ class GildedRoseTest(unittest.TestCase):
         for i in [1,2,3,4,5,7,9,11,13,15, 18, 21, 24, 27, 30, 0, 0, 0]:
             gilded_rose.update_quality()
             self.assertEqual(test_item.quality, i)
-
-
-
-
-    def test_generate_aged_brie_ager(self):
-        item = Item("Aged Brie", 0, 0)
-        ager = BasicItemAger(item)
-        self.assertEqual(ager.quality_rates['final_rate'], 2)
-        self.assertEqual(ager.quality_rates['threshold_rates'], {0:1})
 
 
 if __name__ == '__main__':

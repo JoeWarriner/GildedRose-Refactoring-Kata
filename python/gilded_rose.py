@@ -4,24 +4,74 @@ from abc import ABC, abstractmethod
 
 SPECIAL_ITEMS = [
     "Backstage passes to a TAFKAL80ETC concert",
-    "Sulfuras, Hand of Ragnaros"
 ]
 
 
+class ItemAger(ABC):
+    @abstractmethod
+    def update_quality(self) -> None:
+        ...
 
+class BasicItemAger(ItemAger):
+
+    def __init__(self, item: Item):
+        self.item = item
+
+    def update_quality(self):
+        ''' Update quality of item'''
+        self.item.sell_in -= 1
+        if self.item.sell_in >= 0:
+            self.item.quality -= 1
+        else:
+            self.item.quality -= 2
+
+        if self.item.quality < 0:
+            self.item.quality = 0
+
+class AgedBrieAger(ItemAger):
+    def __init__(self, item: Item):
+         self.item = item
+
+    def update_quality(self):
+        self.item.sell_in -= 1
+        if self.item.sell_in >= 0:
+            self.item.quality += 1
+        else:
+            self.item.quality +=2
+
+        if self.item.quality > 50:
+            self.item.quality = 50
+
+
+class SulfurasAger(ItemAger):
+    def __init__(self, item: Item):
+         self.item = item
+
+    def update_quality(self):
+        pass
+
+
+
+AGERS = {
+    'Aged Brie': AgedBrieAger,
+    'Sulfuras, Hand of Ragnaros': SulfurasAger
+}
 
 class GildedRose(object):
 
     def __init__(self, items: list[Item]):
         self.items = []
         for item in items:
-            if item.name not in SPECIAL_ITEMS:
-                if item.name == 'Aged Brie':
-                    self.items.append(AgedBrieAger(item))
-                else:
-                    self.items.append(BasicItemAger(item))
-            else:
+            if item.name in SPECIAL_ITEMS:
                 self.items.append(item)
+            else:
+                try:
+                    ager = AGERS[item.name](item)
+                except KeyError:
+                    ager = BasicItemAger(item)
+
+                self.items.append(ager)
+
 
     def update_quality(self):
         for item in self.items:
@@ -77,49 +127,9 @@ QUALITY_RATES = {
 
 }
 
-class ItemAger(ABC):
-    @abstractmethod
-    def update_quality() -> None:
-        ...
-
-class BasicItemAger(ItemAger):
-
-    def __init__(self, item: Item):
-        self.item = item
-        self.quality_rates = QUALITY_RATES[item.name] if item.name in QUALITY_RATES.keys() else QUALITY_RATES['basic_item']
-
-    def update_quality_rate(self):
-        '''Update rate of quality increase/decline based on item sell_in value'''
-
-        if self.item.sell_in < min(self.quality_rates['threshold_rates'].keys()):
-                self.quality_rate = self.quality_rates['final_rate']
-        else:
-            threshold = max( [t for t in self.quality_rates['threshold_rates'] if t <= self.item.sell_in])
-            self.quality_rate = self.quality_rates['threshold_rates'][threshold]
 
 
-    def update_quality(self):
-        ''' Update quality of item'''
-        self.item.sell_in -= 1
-        self.update_quality_rate()
-        try:
-            new_quality = self.item.quality + self.quality_rate
-            assert new_quality >= 0
-        except AssertionError:
-            new_quality = 0
-        self.item.quality = new_quality
 
-
-class AgedBrieAger(ItemAger):
-    def __init__(self, item: Item):
-         self.item = item
-
-    def update_quality(self):
-        self.item.sell_in -= 1
-        if self.item.sell_in >= 0:
-            self.item.quality += 1
-        else:
-            self.item.quality +=2
 
 
 
