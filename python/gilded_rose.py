@@ -1,4 +1,5 @@
 from __future__ import annotations
+from abc import ABC, abstractmethod
 # -*- coding: utf-8 -*-
 
 SPECIAL_ITEMS = [
@@ -15,13 +16,16 @@ class GildedRose(object):
         self.items = []
         for item in items:
             if item.name not in SPECIAL_ITEMS:
-                self.items.append(BasicItemAger(item))
+                if item.name == 'Aged Brie':
+                    self.items.append(AgedBrieAger(item))
+                else:
+                    self.items.append(BasicItemAger(item))
             else:
                 self.items.append(item)
 
     def update_quality(self):
         for item in self.items:
-            if isinstance(item, BasicItemAger):
+            if isinstance(item, ItemAger):
                 item.update_quality()
             else:
                 self._update_quality_legacy(item)
@@ -73,8 +77,12 @@ QUALITY_RATES = {
 
 }
 
+class ItemAger(ABC):
+    @abstractmethod
+    def update_quality() -> None:
+        ...
 
-class BasicItemAger:
+class BasicItemAger(ItemAger):
 
     def __init__(self, item: Item):
         self.item = item
@@ -89,6 +97,7 @@ class BasicItemAger:
             threshold = max( [t for t in self.quality_rates['threshold_rates'] if t <= self.item.sell_in])
             self.quality_rate = self.quality_rates['threshold_rates'][threshold]
 
+
     def update_quality(self):
         ''' Update quality of item'''
         self.item.sell_in -= 1
@@ -100,6 +109,17 @@ class BasicItemAger:
             new_quality = 0
         self.item.quality = new_quality
 
+
+class AgedBrieAger(ItemAger):
+    def __init__(self, item: Item):
+         self.item = item
+
+    def update_quality(self):
+        self.item.sell_in -= 1
+        if self.item.sell_in >= 0:
+            self.item.quality += 1
+        else:
+            self.item.quality +=2
 
 
 
