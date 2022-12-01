@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from gilded_rose import Item, GildedRose
+from gilded_rose import Item, GildedRose, BasicItemAger
 
 
 class GildedRoseTest(unittest.TestCase):
@@ -114,7 +114,11 @@ class GildedRoseTest(unittest.TestCase):
 
 
 
-
+    def test_generate_aged_brie_ager(self):
+        item = Item("Aged Brie", 0, 0)
+        ager = BasicItemAger(item)
+        self.assertEqual(ager.quality_rates['final_rate'], 2)
+        self.assertEqual(ager.quality_rates['threshold_rates'], {0:1})
 
 
 if __name__ == '__main__':

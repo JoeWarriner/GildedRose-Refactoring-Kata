@@ -2,10 +2,12 @@ from __future__ import annotations
 # -*- coding: utf-8 -*-
 
 SPECIAL_ITEMS = [
-    "Aged Brie",
-    "Sulfuras, Hand of Ragnaros",
-    "Backstage passes to a TAFKAL80ETC concert"
+    "Backstage passes to a TAFKAL80ETC concert",
+    "Sulfuras, Hand of Ragnaros"
 ]
+
+
+
 
 class GildedRose(object):
 
@@ -55,26 +57,34 @@ class GildedRose(object):
                     item.quality = item.quality + 1
 
 
+QUALITY_RATES = {
+    'basic_item': {
+        'threshold_rates': {
+                0: -1
+        },
+        'final_rate': -2
+    },
+    "Aged Brie": {
+        'threshold_rates': {
+                0: 1
+        },
+        'final_rate': 2
+    },
 
+}
 
 
 class BasicItemAger:
-    quality_rates = {
-        'threshold_rates': {
-            0: -1
-        },
-        'final_rate': -2
-    }
 
     def __init__(self, item: Item):
         self.item = item
-        self.age_rate = -1
+        self.quality_rates = QUALITY_RATES[item.name] if item.name in QUALITY_RATES.keys() else QUALITY_RATES['basic_item']
 
     def update_quality_rate(self):
         '''Update rate of quality increase/decline based on item sell_in value'''
 
         if self.item.sell_in < min(self.quality_rates['threshold_rates'].keys()):
-            self.quality_rate = self.quality_rates['final_rate']
+                self.quality_rate = self.quality_rates['final_rate']
         else:
             threshold = max( [t for t in self.quality_rates['threshold_rates'] if t <= self.item.sell_in])
             self.quality_rate = self.quality_rates['threshold_rates'][threshold]
