@@ -70,9 +70,21 @@ class BackstageUpdater(ItemUpdater):
         if self.item.quality > 50:
             self.item.quality = 50
 
+class ConjuredUpdater(ItemUpdater):
+
+    def update_quality(self) -> None:
+        self.item.sell_in -= 1
+        if self.item.sell_in >= 0:
+            self.item.quality -= 2
+        else:
+            self.item.quality -= 4
+        if self.item.quality < 0:
+            self.item.quality = 0
+
 
 SPECIAL_UPDATERS = {
     'Aged Brie': AgedBrieUpdater,
     'Sulfuras, Hand of Ragnaros': SulfurasUpdater,
-    'Backstage passes to a TAFKAL80ETC concert': BackstageUpdater
+    'Backstage passes to a TAFKAL80ETC concert': BackstageUpdater,
+    'Conjured': ConjuredUpdater
 }
