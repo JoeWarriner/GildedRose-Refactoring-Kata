@@ -13,6 +13,7 @@ class GildedRose(object):
     def _classify_special_items(self, items):
         special_items = SpecialItemTypes()
         special_items.add_item_type('Aged Brie', AgedBrie)
+        special_items.add_item_type("Sulfuras, Hand of Ragnaros", Sulfuras)
         return [special_items.classify_item(item) for item in items]
 
     def update_quality(self):
@@ -88,8 +89,13 @@ class AgedBrie(BasicItem):
         else:
             self.quality += 2
 
+class Sulfuras(BasicItem):
 
+    def _update_quality(self):
+        pass
 
+    def _update_sell_in(self):
+        pass
 
 class SpecialItemTypes:
     item_types: dict[str, Item]
