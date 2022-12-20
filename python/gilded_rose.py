@@ -29,30 +29,34 @@ class GildedRose(object):
 
     def _update_quality_basic(self, item):
         if item.quality > 0:
-            item.quality = item.quality - 1
+            self.decrement_item_quality(item)
         if item.sell_in < 1 :
             if item.quality > 0:
-                item.quality = item.quality - 1
+                self.decrement_item_quality(item)
 
     def _update_quality_aged_brie(self, item):
         if item.quality < 50:
-            item.quality = item.quality + 1
+            self.increment_item_quality(item)
             if item.sell_in < 1:
-                item.quality = item.quality + 1
+                self.increment_item_quality(item)
 
     def _update_quality_backstage_pass(self, item):
         if item.quality < 50:
-            item.quality = item.quality + 1
+            self.increment_item_quality(item)
         if item.sell_in < 11:
             if item.quality < 50:
-                item.quality = item.quality + 1
+                self.increment_item_quality(item)
         if item.sell_in < 6:
             if item.quality < 50:
-                item.quality = item.quality + 1
+                self.increment_item_quality(item)
         if item.sell_in < 1:
             item.quality = item.quality - item.quality
 
+    def increment_item_quality(self, item):
+        item.quality += 1
 
+    def decrement_item_quality(self, item):
+        item.quality -= 1
 
     def _update_sell_in(self, item):
         item.sell_in = item.sell_in - 1
