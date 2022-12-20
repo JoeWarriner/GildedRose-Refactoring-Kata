@@ -63,7 +63,7 @@ class BasicItem(Item):
         self.sell_in -= 1
 
     def _update_quality(self):
-        if self.sell_in < 0:
+        if self.sell_in > 0:
             self.quality -= 1
         else:
             self.quality -= 2
@@ -80,9 +80,14 @@ class BasicItem(Item):
         self._ensure_quality_within_bounds()
 
 
-
 class AgedBrie(BasicItem):
-   pass
+
+    def _update_quality(self):
+        if self.sell_in > 0:
+            self.quality += 1
+        else:
+            self.quality += 2
+
 
 
 
