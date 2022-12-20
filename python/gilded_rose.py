@@ -5,6 +5,7 @@ Strategy:
 - Break update_quality mega method into smaller methods, within GildedRose class.
 - Then we are likely to end up with a very big class, so further break that into smaller classes.
 - Ulimately aim for OOP solution, but don't require strict OOP principles for initial changes.
+
 """
 
 class GildedRose(object):
@@ -28,37 +29,40 @@ class GildedRose(object):
 
 
     def _update_quality_basic(self, item):
-        if item.quality > 0:
+        self.decrement_item_quality(item)
+        if item.sell_in < 1 :
             self.decrement_item_quality(item)
-            if item.sell_in < 1 :
-                self.decrement_item_quality(item)
 
     def _update_quality_aged_brie(self, item):
-        if item.quality < 50:
+        self.increment_item_quality(item)
+        if item.sell_in < 1:
             self.increment_item_quality(item)
-            if item.sell_in < 1:
-                self.increment_item_quality(item)
 
     def _update_quality_backstage_pass(self, item):
-        if item.quality < 50:
-            self.increment_item_quality(item)
+        self.increment_item_quality(item)
         if item.sell_in < 11:
-            if item.quality < 50:
                 self.increment_item_quality(item)
         if item.sell_in < 6:
-            if item.quality < 50:
                 self.increment_item_quality(item)
         if item.sell_in < 1:
             item.quality = item.quality - item.quality
 
     def increment_item_quality(self, item):
-        item.quality += 1
+        if item.quality < 50:
+            item.quality += 1
 
     def decrement_item_quality(self, item):
-        item.quality -= 1
+        if item.quality > 0:
+            item.quality -= 1
 
     def _update_sell_in(self, item):
         item.sell_in = item.sell_in - 1
+
+
+
+
+
+
 
 
 
