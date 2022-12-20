@@ -16,7 +16,8 @@ class GildedRose(object):
     def update_quality(self):
         for item in self.items:
             if item.name == "Sulfuras, Hand of Ragnaros":
-                pass
+                item = Ragnaros(item)
+                item.update()
             elif item.name == "Aged Brie":
                 item = AgedBrie(item)
                 item.update()
@@ -81,3 +82,7 @@ class BackstagePass(BasicItem):
                 self._increment_item_quality()
         if self._item.sell_in < 1:
             self._item.quality = self._item.quality - self._item.quality
+
+class Ragnaros(BasicItem):
+    def update(self):
+        pass
