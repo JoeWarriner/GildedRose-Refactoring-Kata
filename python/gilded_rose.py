@@ -8,7 +8,7 @@ from typing import Type
 class GildedRose(object):
 
     def __init__(self, items):
-        self.items = self._classify_special_items(items)
+        self.items = items
 
     def _classify_special_items(self, items):
         special_items = SpecialItemTypes()
@@ -58,22 +58,22 @@ class Item:
 
 class BasicItem(Item):
     def __init__(self, item: Item):
-        super().__init__(item.name, item.sell_in, item.quality)
+        self._item = item
 
     def _update_sell_in(self):
-        self.sell_in -= 1
+        self._item.sell_in -= 1
 
     def _update_quality(self):
-        if self.sell_in > 0:
-            self.quality -= 1
+        if self._item.sell_in > 0:
+            self._item.quality -= 1
         else:
-            self.quality -= 2
+            self._item.quality -= 2
 
     def _ensure_quality_within_bounds(self):
-        if self.quality > 50:
-            self.quality = 50
-        if self.quality < 0:
-            self.quality = 0
+        if self._item.quality > 50:
+            self._item.quality = 50
+        if self._item.quality < 0:
+            self._item.quality = 0
 
     def update(self):
         self._update_sell_in()
@@ -84,10 +84,10 @@ class BasicItem(Item):
 class AgedBrie(BasicItem):
 
     def _update_quality(self):
-        if self.sell_in > 0:
-            self.quality += 1
+        if self._item.sell_in > 0:
+            self._item.quality += 1
         else:
-            self.quality += 2
+            self._item.quality += 2
 
 class Sulfuras(BasicItem):
 
