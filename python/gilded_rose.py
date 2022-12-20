@@ -34,6 +34,7 @@ class Item:
     def __repr__(self):
         return "%s, %s, %s" % (self.name, self.sell_in, self.quality)
 
+
 class BasicItem(Item):
     def __init__(self, item: Item):
         self._item = item
@@ -115,14 +116,14 @@ class Inventory:
 
     def __init__(self, special_item_types: SpecialItemTypes):
         self.special_item_types = special_item_types
-
+        self.items = []
+        
     def add_item(self, item: Item):
         if self.special_item_types.is_special_item(item):
                 item_type = self.special_item_types.get_special_item_type(item)
                 self.items.append(item_type(item))
         else:
             self.items.append(BasicItem(item))
-
 
     def add_items(self, items: list[Item]):
         for item in items:
