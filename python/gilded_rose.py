@@ -86,7 +86,9 @@ class BackstagePass(EnhancedItem):
         if self._item.sell_in < 1:
             self._item.quality = self._item.quality - self._item.quality
 
-
 class Ragnaros(EnhancedItem):
-    def update(self):
+    def _update_quality(self):
+        pass
+
+    def _update_sell_in(self):
         pass
