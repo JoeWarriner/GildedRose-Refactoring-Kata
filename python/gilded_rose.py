@@ -18,8 +18,9 @@ class GildedRose(object):
             if item.name == "Sulfuras, Hand of Ragnaros":
                 pass
             elif item.name == "Aged Brie":
-                self._update_quality_aged_brie(item)
-                self._update_sell_in(item)
+                item = AgedBrie(item)
+                item.update_quality()
+                item.update_sell_in()
             elif item.name == "Backstage passes to a TAFKAL80ETC concert":
                 self._update_quality_backstage_pass(item)
                 self._update_sell_in(item)
@@ -34,10 +35,7 @@ class GildedRose(object):
         if item.sell_in < 1 :
             self.decrement_item_quality(item)
 
-    def _update_quality_aged_brie(self, item):
-        self.increment_item_quality(item)
-        if item.sell_in < 1:
-            self.increment_item_quality(item)
+
 
     def _update_quality_backstage_pass(self, item):
         self.increment_item_quality(item)
@@ -61,15 +59,6 @@ class GildedRose(object):
 
 
 
-
-
-
-
-
-
-
-
-
 class Item:
     def __init__(self, name, sell_in, quality):
         self.name = name
@@ -78,6 +67,7 @@ class Item:
 
     def __repr__(self):
         return "%s, %s, %s" % (self.name, self.sell_in, self.quality)
+
 
 class BasicItem(Item):
     def __init__(self, item):
@@ -88,9 +78,19 @@ class BasicItem(Item):
         if self._item.sell_in < 1 :
             self.decrement_item_quality()
 
+    def increment_item_quality(self):
+        if self._item.quality < 50:
+            self._item.quality += 1
+
     def decrement_item_quality(self):
         if self._item.quality > 0:
             self._item.quality -= 1
 
     def update_sell_in(self):
         self._item.sell_in = self._item.sell_in - 1
+
+class AgedBrie(BasicItem):
+    def update_quality(self):
+        self.increment_item_quality()
+        if self._item.sell_in < 1:
+            self.increment_item_quality()
