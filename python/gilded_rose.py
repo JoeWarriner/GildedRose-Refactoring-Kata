@@ -103,6 +103,15 @@ class Sulfuras(BasicItem):
     def _item_sell_in_change_rate(self):
         return 0
 
+class BackStagePass(BasicItem):
+    def _item_quality_change_rate(self):
+        if self._item.sell_in < 0:
+            return 0
+        if self._item.sell_in < 5:
+            return 3
+        if self._item.sell_in < 10:
+            return 2
+        return 1
 
 class SpecialItemTypes:
     item_types: dict[str, Item]
