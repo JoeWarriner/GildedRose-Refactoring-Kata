@@ -30,8 +30,7 @@ class GildedRose(object):
     def _update_quality_basic(self, item):
         if item.quality > 0:
             self.decrement_item_quality(item)
-        if item.sell_in < 1 :
-            if item.quality > 0:
+            if item.sell_in < 1 :
                 self.decrement_item_quality(item)
 
     def _update_quality_aged_brie(self, item):
