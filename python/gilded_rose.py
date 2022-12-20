@@ -60,14 +60,17 @@ class BasicItem(Item):
     def __init__(self, item: Item):
         self._item = item
 
-    def _update_sell_in(self):
-        self._item.sell_in -= 1
-
-    def _update_quality(self):
+    def _item_quality_change_rate(self):
         if self._item.sell_in > 0:
-            self._item.quality -= 1
+            return -1
         else:
-            self._item.quality -= 2
+            return -2
+
+    def _item_sell_in_change_rate(self):
+        return -1
+
+    def _update_sell_in(self):
+        self._item.sell_in += self._item_sell_in_change_rate()
 
     def _ensure_quality_within_bounds(self):
         if self._item.quality > 50:
@@ -75,27 +78,31 @@ class BasicItem(Item):
         if self._item.quality < 0:
             self._item.quality = 0
 
+    def _update_quality(self):
+        self._item += self._item_quality_change_rate()
+        self._ensure_quality_within_bounds()
+
     def update(self):
         self._update_sell_in()
         self._update_quality()
-        self._ensure_quality_within_bounds()
 
 
 class AgedBrie(BasicItem):
 
-    def _update_quality(self):
+    def _item_quality_change_rate(self):
         if self._item.sell_in > 0:
-            self._item.quality += 1
+            return 1
         else:
-            self._item.quality += 2
+            return 2
 
 class Sulfuras(BasicItem):
 
-    def _update_quality(self):
-        pass
+    def _item_quality_change_rate(self):
+        return 0
 
-    def _update_sell_in(self):
-        pass
+    def _item_sell_in_change_rate(self):
+        return 0
+
 
 class SpecialItemTypes:
     item_types: dict[str, Item]
