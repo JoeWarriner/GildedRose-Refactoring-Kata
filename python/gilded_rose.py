@@ -8,7 +8,12 @@ from typing import Type
 class GildedRose(object):
 
     def __init__(self, items):
-        self.items = items
+        self.items = self._classify_special_items(items)
+
+    def _classify_special_items(self, items):
+        special_items = SpecialItemTypes()
+        special_items.add_item_type('Aged Brie', AgedBrie)
+        return [special_items.classify_item(item) for item in items]
 
     def update_quality(self):
         for item in self.items:
