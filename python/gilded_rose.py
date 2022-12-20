@@ -15,7 +15,7 @@ class GildedRose(object):
 
     def update_quality(self):
         for item in self.items:
-            item = BasicItem.create(item)
+            item = EnhancedItem.create(item)
             item.update()
 
 
@@ -32,29 +32,13 @@ class Item:
         return "%s, %s, %s" % (self.name, self.sell_in, self.quality)
 
 
-class BasicItem(Item):
+class EnhancedItem(Item):
     def __init__(self, item):
         self._item = item
 
     def update(self):
         self._update_quality()
         self._update_sell_in()
-
-    def _update_quality(self):
-        self._decrement_item_quality()
-        if self._item.sell_in < 1 :
-            self._decrement_item_quality()
-
-    def _increment_item_quality(self):
-        if self._item.quality < 50:
-            self._item.quality += 1
-
-    def _decrement_item_quality(self):
-        if self._item.quality > 0:
-            self._item.quality -= 1
-
-    def _update_sell_in(self):
-        self._item.sell_in = self._item.sell_in - 1
 
     @classmethod
     def create(cls, item):
@@ -65,16 +49,37 @@ class BasicItem(Item):
         elif item.name == "Backstage passes to a TAFKAL80ETC concert":
             return BackstagePass(item)
         else:
-            return BasicItem(item)
+            return Basic(item)
+
+    def _update_sell_in(self):
+        self._item.sell_in = self._item.sell_in - 1
+
+    def _update_quality(self):
+        pass
+
+    def _increment_item_quality(self):
+        if self._item.quality < 50:
+            self._item.quality += 1
+
+    def _decrement_item_quality(self):
+        if self._item.quality > 0:
+            self._item.quality -= 1
 
 
-class AgedBrie(BasicItem):
+class Basic(EnhancedItem):
+    def _update_quality(self):
+        self._decrement_item_quality()
+        if self._item.sell_in < 1 :
+            self._decrement_item_quality()
+
+
+class AgedBrie(EnhancedItem):
     def _update_quality(self):
         self._increment_item_quality()
         if self._item.sell_in < 1:
             self._increment_item_quality()
 
-class BackstagePass(BasicItem):
+class BackstagePass(EnhancedItem):
 
     def _update_quality(self):
         self._increment_item_quality()
@@ -86,6 +91,6 @@ class BackstagePass(BasicItem):
             self._item.quality = self._item.quality - self._item.quality
 
 
-class Ragnaros(BasicItem):
+class Ragnaros(EnhancedItem):
     def update(self):
         pass
