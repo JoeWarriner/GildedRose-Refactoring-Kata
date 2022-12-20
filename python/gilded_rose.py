@@ -49,3 +49,17 @@ class Item:
     def __repr__(self):
         return "%s, %s, %s" % (self.name, self.sell_in, self.quality)
 
+class AgedBrie(Item):
+    pass
+
+class BasicItem(Item):
+    pass
+
+class ItemClassifier:
+
+    def classify(item: Item):
+        if item.name == "Aged Brie":
+            return AgedBrie(item)
+        else:
+            return BasicItem(item)
+
