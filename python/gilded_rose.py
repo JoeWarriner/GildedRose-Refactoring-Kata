@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 
+"""
+Strategy:
+- Break update_quality mega method into smaller methods, within GildedRose class.
+- Then we are likely to end up with a very big class, so further break that into smaller classes.
+- Ulimately aim for OOP solution, but don't require strict OOP principles for initial changes.
+"""
+
 class GildedRose(object):
 
     def __init__(self, items):
