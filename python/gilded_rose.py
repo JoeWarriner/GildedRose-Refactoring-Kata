@@ -9,14 +9,14 @@ class GildedRose(object):
     items: list[BasicItem]
 
     def __init__(self, items):
-        self.items = self._classify_special_items(items)
-
-    def _classify_special_items(self, items):
-        special_items = SpecialItemTypes()
-        special_items.add_item_type('Aged Brie', AgedBrie)
-        special_items.add_item_type("Sulfuras, Hand of Ragnaros", Sulfuras)
-        special_items.add_item_type("Backstage passes to a TAFKAL80ETC concert", BackStagePass)
-        return [special_items.classify_item(item) for item in items]
+        self.items = self._classify_items(items)
+    
+    def _classify_items(self, items):
+        item_types = ItemTypes()
+        item_types.add('Aged Brie', AgedBrie)
+        item_types.add("Sulfuras, Hand of Ragnaros", Sulfuras)
+        item_types.add("Backstage passes to a TAFKAL80ETC concert", BackStagePass)
+        return item_types.classify_items(items)
 
     def update_quality(self):
         for item in self.items:
@@ -89,17 +89,21 @@ class BackStagePass(BasicItem):
             return 2
         return 1
 
-class SpecialItemTypes:
+
+class ItemTypes:
     item_types: dict[str, Item]
 
     def __init__(self):
         self.item_types = {}
 
-    def add_item_type(self, item_name :str, item_class: Type[Item]):
+    def add(self, item_name :str, item_class: Type[Item]):
         self.item_types[item_name] = item_class
 
-    def classify_item(self, item: Item):
+    def _classify_item(self, item: Item):
         if item.name in self.item_types.keys():
             return self.item_types[item.name](item)
         else:
             return BasicItem(item)
+
+    def classify_items(self, items: list[Item]):
+        return [self._classify_item(item) for item in items]
