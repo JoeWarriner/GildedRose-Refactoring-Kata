@@ -24,8 +24,9 @@ class GildedRose(object):
                 self._update_quality_backstage_pass(item)
                 self._update_sell_in(item)
             else:
-                self._update_quality_basic(item)
-                self._update_sell_in(item)
+                item = BasicItem(item)
+                item.update_quality()
+                item.update_sell_in()
 
 
     def _update_quality_basic(self, item):
@@ -67,6 +68,8 @@ class GildedRose(object):
 
 
 
+
+
 class Item:
     def __init__(self, name, sell_in, quality):
         self.name = name
@@ -75,3 +78,19 @@ class Item:
 
     def __repr__(self):
         return "%s, %s, %s" % (self.name, self.sell_in, self.quality)
+
+class BasicItem(Item):
+    def __init__(self, item):
+        self._item = item
+
+    def update_quality(self):
+        self.decrement_item_quality()
+        if self._item.sell_in < 1 :
+            self.decrement_item_quality()
+
+    def decrement_item_quality(self):
+        if self._item.quality > 0:
+            self._item.quality -= 1
+
+    def update_sell_in(self):
+        self._item.sell_in = self._item.sell_in - 1
