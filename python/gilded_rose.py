@@ -16,9 +16,10 @@ class GildedRose(object):
         for item in self.items:
             if item.name != "Sulfuras, Hand of Ragnaros":
                 self._initial_quality_update(item)
-                self._update_sell_in(item)
-                if item.sell_in < 0 :
+                if item.sell_in < 1 :
                     self._update_quality_for_past_sell_date(item)
+                self._update_sell_in(item)
+
 
     def _initial_quality_update(self, item):
         if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert":
