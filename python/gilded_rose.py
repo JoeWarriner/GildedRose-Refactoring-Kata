@@ -7,10 +7,19 @@ from typing import Type
 """
 
 class GildedRose(object):
-    
+
     def __init__(self, items):
-        self.inventory = Inventory()
+        special_item_types = SpecialItemTypes()
+        special_item_types.add('Aged Brie', AgedBrie)
+        special_item_types.add("Sulfuras, Hand of Ragnaros", Sulfuras)
+        special_item_types.add("Backstage passes to a TAFKAL80ETC concert", BackStagePass)
+
+        self.inventory = Inventory(special_item_types)
         self.inventory.add_items(items)
+
+    def _set_available_items(self):
+        self.item_types = SpecialItemTypes()
+
 
     def update_quality(self):
         self.inventory.update_items()
@@ -83,7 +92,7 @@ class BackStagePass(BasicItem):
         return 1
 
 
-class ItemTypes:
+class SpecialItemTypes:
     item_types: dict[str, Item]
 
     def __init__(self):
@@ -92,28 +101,32 @@ class ItemTypes:
     def add(self, item_name :str, item_class: Type[Item]):
         self.item_types[item_name] = item_class
 
-    def _classify_item(self, item: Item):
-        if item.name in self.item_types.keys():
-            return self.item_types[item.name](item)
-        else:
-            return BasicItem(item)
+    def is_special_item(self, item: Item):
+        return item.name in self.item_types.keys()
 
-    def classify_items(self, items: list[Item]):
-        return [self._classify_item(item) for item in items]
+    def get_special_item_type(self, item: Item):
+        return self.item_types[item.name]
+
 
 
 
 class Inventory:
     items: list[BasicItem]
 
-    def __init__(self):
-        self.item_types = ItemTypes()
-        self.item_types.add('Aged Brie', AgedBrie)
-        self.item_types.add("Sulfuras, Hand of Ragnaros", Sulfuras)
-        self.item_types.add("Backstage passes to a TAFKAL80ETC concert", BackStagePass)
+    def __init__(self, special_item_types: SpecialItemTypes):
+        self.special_item_types = special_item_types
+
+    def add_item(self, item: Item):
+        if self.special_item_types.is_special_item(item):
+                item_type = self.special_item_types.get_special_item_type(item)
+                self.items.append(item_type(item))
+        else:
+            self.items.append(BasicItem(item))
+
 
     def add_items(self, items: list[Item]):
-        self.items = self.item_types.classify_items(items)
+        for item in items:
+            self.add_item(item)
 
     def update_items(self):
         for item in self.items:
