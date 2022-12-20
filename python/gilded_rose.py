@@ -11,14 +11,11 @@ Strategy:
 class GildedRose(object):
 
     def __init__(self, items):
-        self.items = items
+        self.items = [EnhancedItem.create(item) for item in items]
 
     def update_quality(self):
         for item in self.items:
-            item = EnhancedItem.create(item)
             item.update()
-
-
 
 
 
@@ -40,17 +37,6 @@ class EnhancedItem(Item):
         self._update_quality()
         self._update_sell_in()
 
-    @classmethod
-    def create(cls, item):
-        if item.name == "Sulfuras, Hand of Ragnaros":
-            return Ragnaros(item)
-        elif item.name == "Aged Brie":
-            return AgedBrie(item)
-        elif item.name == "Backstage passes to a TAFKAL80ETC concert":
-            return BackstagePass(item)
-        else:
-            return Basic(item)
-
     def _update_sell_in(self):
         self._item.sell_in = self._item.sell_in - 1
 
@@ -65,6 +51,16 @@ class EnhancedItem(Item):
         if self._item.quality > 0:
             self._item.quality -= 1
 
+    @classmethod
+    def create(cls, item):
+        if item.name == "Sulfuras, Hand of Ragnaros":
+            return Ragnaros(item)
+        elif item.name == "Aged Brie":
+            return AgedBrie(item)
+        elif item.name == "Backstage passes to a TAFKAL80ETC concert":
+            return BackstagePass(item)
+        else:
+            return Basic(item)
 
 class Basic(EnhancedItem):
     def _update_quality(self):
