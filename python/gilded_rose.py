@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+"""
+- Use OOP approach
+- Encapsulate item state in wrapper.
+"""
 class GildedRose(object):
 
     def __init__(self, items):
@@ -44,3 +48,4 @@ class Item:
 
     def __repr__(self):
         return "%s, %s, %s" % (self.name, self.sell_in, self.quality)
+
