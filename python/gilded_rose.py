@@ -46,12 +46,9 @@ class GildedRose(object):
                     if item.quality < 50:
                         item.quality = item.quality + 1
         if item.sell_in < 1:
-            if item.name != "Aged Brie":
-                if item.name != "Backstage passes to a TAFKAL80ETC concert":
-                    pass
-                else:
-                    item.quality = item.quality - item.quality
-            else:
+            if item.name == "Backstage passes to a TAFKAL80ETC concert":
+                item.quality = item.quality - item.quality
+            if item.name == "Aged Brie":
                 if item.quality < 50:
                     item.quality = item.quality + 1
 
