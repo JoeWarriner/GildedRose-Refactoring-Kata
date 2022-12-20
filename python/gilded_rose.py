@@ -9,17 +9,13 @@ from typing import Type
 class GildedRose(object):
 
     def __init__(self, items):
-        special_item_types = SpecialItemTypes()
-        special_item_types.add('Aged Brie', AgedBrie)
-        special_item_types.add("Sulfuras, Hand of Ragnaros", Sulfuras)
-        special_item_types.add("Backstage passes to a TAFKAL80ETC concert", BackStagePass)
 
-        self.inventory = Inventory(special_item_types)
+        self.inventory = Inventory()
+        self.inventory.add_special_item_type('Aged Brie', AgedBrie)
+        self.inventory.add_special_item_type("Sulfuras, Hand of Ragnaros", Sulfuras)
+        self.inventory.add_special_item_type("Backstage passes to a TAFKAL80ETC concert", BackStagePass)
+
         self.inventory.add_items(items)
-
-    def _set_available_items(self):
-        self.item_types = SpecialItemTypes()
-
 
     def update_quality(self):
         self.inventory.update_items()
@@ -39,23 +35,23 @@ class BasicItem(Item):
     def __init__(self, item: Item):
         self._item = item
 
+    def _item_sell_in_change_rate(self):
+        return -1
+
     def _item_quality_change_rate(self):
         if self._item.sell_in > 0:
             return -1
         else:
             return -2
 
-    def _item_sell_in_change_rate(self):
-        return -1
-
-    def _update_sell_in(self):
-        self._item.sell_in += self._item_sell_in_change_rate()
-
     def _ensure_quality_within_bounds(self):
         if self._item.quality > 50:
             self._item.quality = 50
         if self._item.quality < 0:
             self._item.quality = 0
+
+    def _update_sell_in(self):
+        self._item.sell_in += self._item_sell_in_change_rate()
 
     def _update_quality(self):
         self._item.quality += self._item_quality_change_rate()
@@ -83,6 +79,7 @@ class Sulfuras(BasicItem):
         return 0
 
 class BackStagePass(BasicItem):
+
     def _item_quality_change_rate(self):
         if self._item.sell_in < 0:
             return 0
@@ -114,10 +111,13 @@ class SpecialItemTypes:
 class Inventory:
     items: list[BasicItem]
 
-    def __init__(self, special_item_types: SpecialItemTypes):
-        self.special_item_types = special_item_types
+    def __init__(self):
+        self.special_item_types = SpecialItemTypes()
         self.items = []
-        
+
+    def add_special_item_type(self, item_name :str, item_class: Type[Item]):
+        self.special_item_types.add(item_name, item_class)
+
     def add_item(self, item: Item):
         if self.special_item_types.is_special_item(item):
                 item_type = self.special_item_types.get_special_item_type(item)
