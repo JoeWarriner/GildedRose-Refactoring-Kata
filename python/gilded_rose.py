@@ -29,26 +29,26 @@ class GildedRose(object):
 
 
     def _update_quality_basic(self, item):
-        self.decrement_item_quality(item)
+        self._decrement_item_quality(item)
         if item.sell_in < 1 :
-            self.decrement_item_quality(item)
+            self._decrement_item_quality(item)
 
 
 
     def _update_quality_backstage_pass(self, item):
-        self.increment_item_quality(item)
+        self._increment_item_quality(item)
         if item.sell_in < 11:
-                self.increment_item_quality(item)
+                self._increment_item_quality(item)
         if item.sell_in < 6:
-                self.increment_item_quality(item)
+                self._increment_item_quality(item)
         if item.sell_in < 1:
             item.quality = item.quality - item.quality
 
-    def increment_item_quality(self, item):
+    def _increment_item_quality(self, item):
         if item.quality < 50:
             item.quality += 1
 
-    def decrement_item_quality(self, item):
+    def _decrement_item_quality(self, item):
         if item.quality > 0:
             item.quality -= 1
 
@@ -76,15 +76,15 @@ class BasicItem(Item):
         self._update_sell_in()
 
     def _update_quality(self):
-        self.decrement_item_quality()
+        self._decrement_item_quality()
         if self._item.sell_in < 1 :
-            self.decrement_item_quality()
+            self._decrement_item_quality()
 
-    def increment_item_quality(self):
+    def _increment_item_quality(self):
         if self._item.quality < 50:
             self._item.quality += 1
 
-    def decrement_item_quality(self):
+    def _decrement_item_quality(self):
         if self._item.quality > 0:
             self._item.quality -= 1
 
@@ -93,6 +93,6 @@ class BasicItem(Item):
 
 class AgedBrie(BasicItem):
     def _update_quality(self):
-        self.increment_item_quality()
+        self._increment_item_quality()
         if self._item.sell_in < 1:
-            self.increment_item_quality()
+            self._increment_item_quality()
