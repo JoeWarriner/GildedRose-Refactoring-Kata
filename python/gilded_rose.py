@@ -11,7 +11,7 @@ Strategy:
 class GildedRose(object):
 
     def __init__(self, items):
-        self.items = [EnhancedItem.create(item) for item in items]
+        self.items = [UpdatableItem.create(item) for item in items]
 
     def update_quality(self):
         for item in self.items:
@@ -29,7 +29,7 @@ class Item:
         return "%s, %s, %s" % (self.name, self.sell_in, self.quality)
 
 
-class EnhancedItem(Item):
+class UpdatableItem(Item):
     def __init__(self, item):
         self._item = item
 
@@ -62,20 +62,20 @@ class EnhancedItem(Item):
         else:
             return Basic(item)
 
-class Basic(EnhancedItem):
+class Basic(UpdatableItem):
     def _update_quality(self):
         self._decrement_item_quality()
         if self._item.sell_in < 1 :
             self._decrement_item_quality()
 
 
-class AgedBrie(EnhancedItem):
+class AgedBrie(UpdatableItem):
     def _update_quality(self):
         self._increment_item_quality()
         if self._item.sell_in < 1:
             self._increment_item_quality()
 
-class BackstagePass(EnhancedItem):
+class BackstagePass(UpdatableItem):
 
     def _update_quality(self):
         self._increment_item_quality()
@@ -86,7 +86,7 @@ class BackstagePass(EnhancedItem):
         if self._item.sell_in < 1:
             self._item.quality = self._item.quality - self._item.quality
 
-class Ragnaros(EnhancedItem):
+class Ragnaros(UpdatableItem):
     def _update_quality(self):
         pass
 
