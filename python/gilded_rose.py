@@ -7,19 +7,13 @@ from typing import Type
 """
 
 class GildedRose(object):
-    items: list[BasicItem]
-
+    
     def __init__(self, items):
-        self.items = self._classify_items(items)
-
-    def _classify_items(self, items):
-        item_types = ItemTypes()
-
-        return item_types.classify_items(items)
+        self.inventory = Inventory()
+        self.inventory.add_items(items)
 
     def update_quality(self):
-        for item in self.items:
-            item.update()
+        self.inventory.update_items()
 
 
 class Item:
@@ -118,8 +112,9 @@ class Inventory:
         self.item_types.add("Sulfuras, Hand of Ragnaros", Sulfuras)
         self.item_types.add("Backstage passes to a TAFKAL80ETC concert", BackStagePass)
 
-    def add_items(self):
-        pass
+    def add_items(self, items: list[Item]):
+        self.items = self.item_types.classify_items(items)
 
-    def update_items():
-        pass
+    def update_items(self):
+        for item in self.items:
+            item.update()
