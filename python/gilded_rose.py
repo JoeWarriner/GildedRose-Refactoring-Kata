@@ -5,17 +5,16 @@ from typing import Type
 - Use OOP approach
 - Encapsulate item state in wrapper.
 """
+
 class GildedRose(object):
     items: list[BasicItem]
 
     def __init__(self, items):
         self.items = self._classify_items(items)
-    
+
     def _classify_items(self, items):
         item_types = ItemTypes()
-        item_types.add('Aged Brie', AgedBrie)
-        item_types.add("Sulfuras, Hand of Ragnaros", Sulfuras)
-        item_types.add("Backstage passes to a TAFKAL80ETC concert", BackStagePass)
+
         return item_types.classify_items(items)
 
     def update_quality(self):
@@ -107,3 +106,20 @@ class ItemTypes:
 
     def classify_items(self, items: list[Item]):
         return [self._classify_item(item) for item in items]
+
+
+
+class Inventory:
+    items: list[BasicItem]
+
+    def __init__(self):
+        self.item_types = ItemTypes()
+        self.item_types.add('Aged Brie', AgedBrie)
+        self.item_types.add("Sulfuras, Hand of Ragnaros", Sulfuras)
+        self.item_types.add("Backstage passes to a TAFKAL80ETC concert", BackStagePass)
+
+    def add_items(self):
+        pass
+
+    def update_items():
+        pass
