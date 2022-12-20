@@ -36,19 +36,24 @@ class GildedRose(object):
 
 
     def _update_quality_special(self, item):
-        if item.quality < 50:
-            item.quality = item.quality + 1
-            if item.name == "Backstage passes to a TAFKAL80ETC concert":
-                if item.sell_in < 11:
-                    if item.quality < 50:
-                        item.quality = item.quality + 1
-                if item.sell_in < 6:
-                    if item.quality < 50:
-                        item.quality = item.quality + 1
-        if item.sell_in < 1:
-            if item.name == "Backstage passes to a TAFKAL80ETC concert":
+
+
+        if item.name == "Backstage passes to a TAFKAL80ETC concert":
+            if item.quality < 50:
+                item.quality = item.quality + 1
+            if item.sell_in < 11:
+                if item.quality < 50:
+                    item.quality = item.quality + 1
+            if item.sell_in < 6:
+                if item.quality < 50:
+                    item.quality = item.quality + 1
+            if item.sell_in < 1:
                 item.quality = item.quality - item.quality
-            if item.name == "Aged Brie":
+
+        if item.name == "Aged Brie":
+            if item.quality < 50:
+                item.quality = item.quality + 1
+            if item.sell_in < 1:
                 if item.quality < 50:
                     item.quality = item.quality + 1
 
