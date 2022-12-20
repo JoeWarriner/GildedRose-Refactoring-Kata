@@ -59,10 +59,23 @@ class BasicItem(Item):
     def __init__(self, item: Item):
         super().__init__(item.name, item.sell_in, item.quality)
 
+    def update(self):
+        self._reduce_quality()
+        self._reduce_sell_in()
+
+    def _reduce_quality(self):
+        if self.sell_in > 0:
+            self.quality -= 1
+        else:
+            self.quality -= 2
+
+    def _reduce_sell_in(self):
+        self.sell_in -= 1
+
+
 
 class AgedBrie(BasicItem):
-    def update():
-        pass
+   pass
 
 
 
