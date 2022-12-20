@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-
+from __future__ import annotations
+from typing import Type
 """
 - Use OOP approach
 - Encapsulate item state in wrapper.
@@ -55,11 +56,16 @@ class AgedBrie(Item):
 class BasicItem(Item):
     pass
 
-class ItemClassifier:
 
-    def classify(item: Item):
-        if item.name == "Aged Brie":
-            return AgedBrie(item)
-        else:
-            return BasicItem(item)
+class SpecialItemTypes:
+    item_types: dict[str, Item]
 
+    def __init__(self):
+        self.item_types = {}
+
+    def add_item_type(self, item_name :str, item_class: Type[Item]):
+        self.item_types[item_name] = item_class
+
+    def classify_item(self, item: Item):
+        if item.name in self.item_types.keys():
+            return self.item_types[item.name](item)
