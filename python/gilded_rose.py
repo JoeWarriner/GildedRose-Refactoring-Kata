@@ -6,45 +6,21 @@ from typing import Type
 - Encapsulate item state in wrapper.
 """
 class GildedRose(object):
+    items: list[BasicItem]
 
     def __init__(self, items):
-        self.items = items
+        self.items = self._classify_special_items(items)
 
     def _classify_special_items(self, items):
         special_items = SpecialItemTypes()
         special_items.add_item_type('Aged Brie', AgedBrie)
         special_items.add_item_type("Sulfuras, Hand of Ragnaros", Sulfuras)
+        special_items.add_item_type("Backstage passes to a TAFKAL80ETC concert", BackStagePass)
         return [special_items.classify_item(item) for item in items]
 
     def update_quality(self):
         for item in self.items:
-            if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert":
-                if item.quality > 0:
-                    if item.name != "Sulfuras, Hand of Ragnaros":
-                        item.quality = item.quality - 1
-            else:
-                if item.quality < 50:
-                    item.quality = item.quality + 1
-                    if item.name == "Backstage passes to a TAFKAL80ETC concert":
-                        if item.sell_in < 11:
-                            if item.quality < 50:
-                                item.quality = item.quality + 1
-                        if item.sell_in < 6:
-                            if item.quality < 50:
-                                item.quality = item.quality + 1
-            if item.name != "Sulfuras, Hand of Ragnaros":
-                item.sell_in = item.sell_in - 1
-            if item.sell_in < 0:
-                if item.name != "Aged Brie":
-                    if item.name != "Backstage passes to a TAFKAL80ETC concert":
-                        if item.quality > 0:
-                            if item.name != "Sulfuras, Hand of Ragnaros":
-                                item.quality = item.quality - 1
-                    else:
-                        item.quality = item.quality - item.quality
-                else:
-                    if item.quality < 50:
-                        item.quality = item.quality + 1
+            item.update()
 
 
 class Item:
@@ -79,7 +55,7 @@ class BasicItem(Item):
             self._item.quality = 0
 
     def _update_quality(self):
-        self._item += self._item_quality_change_rate()
+        self._item.quality += self._item_quality_change_rate()
         self._ensure_quality_within_bounds()
 
     def update(self):
