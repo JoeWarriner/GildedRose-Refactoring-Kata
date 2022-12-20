@@ -17,10 +17,10 @@ class GildedRose(object):
             if item.name == "Sulfuras, Hand of Ragnaros":
                 pass
             elif item.name == "Aged Brie":
-                self._update_quality_special(item)
+                self._update_quality_aged_brie(item)
                 self._update_sell_in(item)
             elif item.name == "Backstage passes to a TAFKAL80ETC concert":
-                self._update_quality_special(item)
+                self._update_quality_backstage_pass(item)
                 self._update_sell_in(item)
             else:
                 self._update_quality_basic(item)
@@ -34,28 +34,26 @@ class GildedRose(object):
             if item.quality > 0:
                 item.quality = item.quality - 1
 
-
-    def _update_quality_special(self, item):
-
-
-        if item.name == "Backstage passes to a TAFKAL80ETC concert":
+    def _update_quality_aged_brie(self, item):
+        if item.quality < 50:
+                item.quality = item.quality + 1
+        if item.sell_in < 1:
             if item.quality < 50:
                 item.quality = item.quality + 1
-            if item.sell_in < 11:
-                if item.quality < 50:
-                    item.quality = item.quality + 1
-            if item.sell_in < 6:
-                if item.quality < 50:
-                    item.quality = item.quality + 1
-            if item.sell_in < 1:
-                item.quality = item.quality - item.quality
 
-        if item.name == "Aged Brie":
+    def _update_quality_backstage_pass(self, item):
+        if item.quality < 50:
+            item.quality = item.quality + 1
+        if item.sell_in < 11:
             if item.quality < 50:
                 item.quality = item.quality + 1
-            if item.sell_in < 1:
-                if item.quality < 50:
-                    item.quality = item.quality + 1
+        if item.sell_in < 6:
+            if item.quality < 50:
+                item.quality = item.quality + 1
+        if item.sell_in < 1:
+            item.quality = item.quality - item.quality
+
+
 
     def _update_sell_in(self, item):
         item.sell_in = item.sell_in - 1
