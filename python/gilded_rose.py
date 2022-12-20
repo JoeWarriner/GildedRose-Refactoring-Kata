@@ -21,10 +21,17 @@ class GildedRose(object):
 
     def _update_quality(self, item):
         item_has_special_conditions = item.name == "Aged Brie" or item.name == "Backstage passes to a TAFKAL80ETC concert"
+
+        
         if not item_has_special_conditions:
+            if item.quality > 0:
+                    item.quality = item.quality - 1
+            if item.sell_in < 1 :
                 if item.quality > 0:
                     item.quality = item.quality - 1
-        else:
+
+
+        if item_has_special_conditions:
             if item.quality < 50:
                 item.quality = item.quality + 1
                 if item.name == "Backstage passes to a TAFKAL80ETC concert":
@@ -34,20 +41,15 @@ class GildedRose(object):
                     if item.sell_in < 6:
                         if item.quality < 50:
                             item.quality = item.quality + 1
-
-        if item.sell_in < 1 :
-            if not item_has_special_conditions:
-                if item.quality > 0:
-                    item.quality = item.quality - 1
-
-            if item.name != "Aged Brie":
-                if item.name != "Backstage passes to a TAFKAL80ETC concert":
-                    pass
+            if item.sell_in < 1:
+                if item.name != "Aged Brie":
+                    if item.name != "Backstage passes to a TAFKAL80ETC concert":
+                        pass
+                    else:
+                        item.quality = item.quality - item.quality
                 else:
-                    item.quality = item.quality - item.quality
-            else:
-                if item.quality < 50:
-                    item.quality = item.quality + 1
+                    if item.quality < 50:
+                        item.quality = item.quality + 1
 
     def _update_sell_in(self, item):
         item.sell_in = item.sell_in - 1
