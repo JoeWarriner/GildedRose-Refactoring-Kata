@@ -55,11 +55,15 @@ class Item:
     def __repr__(self):
         return "%s, %s, %s" % (self.name, self.sell_in, self.quality)
 
-class AgedBrie(Item):
-    pass
-
 class BasicItem(Item):
-    pass
+    def __init__(self, item: Item):
+        super().__init__(item.name, item.sell_in, item.quality)
+
+
+class AgedBrie(BasicItem):
+    def update():
+        pass
+
 
 
 class SpecialItemTypes:
@@ -74,3 +78,5 @@ class SpecialItemTypes:
     def classify_item(self, item: Item):
         if item.name in self.item_types.keys():
             return self.item_types[item.name](item)
+        else:
+            return BasicItem(item)
