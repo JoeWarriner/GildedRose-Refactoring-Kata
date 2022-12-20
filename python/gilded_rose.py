@@ -82,12 +82,15 @@ class BackStagePass(BasicItem):
 
     def _item_quality_change_rate(self):
         if self._item.sell_in < 0:
-            return 0
+            return -(self._item.quality)
         if self._item.sell_in < 5:
             return 3
         if self._item.sell_in < 10:
             return 2
         return 1
+
+
+
 
 
 class SpecialItemTypes:
